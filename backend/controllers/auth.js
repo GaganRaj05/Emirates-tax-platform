@@ -1,7 +1,8 @@
 const jsonwebtoken = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
 const Users = require('../models/User'); 
-const User = require('../../../../LegalEasier/backend/models/User');
+const Admin = require('../models/Admin');
+const Consultants = require('../models/Consultants');
 
 const handleLogin = async(req,res)=> {
     try {
@@ -34,7 +35,7 @@ const handleLogin = async(req,res)=> {
     }   
     catch(err) {
         console.log(err.message);
-        return res.status(501).json({success:false, msg:"Some error occured please try again later"});
+        return res.status(500).json({success:false, msg:"Some error occured please try again later"});
     }
 } 
 
@@ -60,7 +61,7 @@ const userSignUp = async(req, res) => {
         return res.status(201).json({success:true, msg:"User account created successfully"});
     } catch (err) {
         console.log(err.message);
-        return res.status(501).json({success:false, msg:"Some error occured please try again later"});
+        return res.status(500).json({success:false, msg:"Some error occured please try again later"});
     }
 }
 
@@ -89,8 +90,105 @@ const checkAuth = async(req, res) => {
         if(err instanceof jsonwebtoken.JsonWebTokenError) return res.status(401).json({success:false,msg:"Invalid authentication token"});
 
         console.log(err.message);
-        return res.status(501).json({success:false, msg:"Some error occured  please try again later"});
+        return res.status(500).json({success:false, msg:"Some error occured  please try again later"});
     }
 }
 
-module.exports = {checkAuth, handleLogin, userSignUp}
+const adminSignUp = async(req, res)=> {
+    try {
+        const {email, password} = req.body;
+
+        const user = await Admin.findOne({email});
+        if(user) return res.status(400).json({success:false, msg:"Admin exists"});
+
+        const hashedPassword = await bcryptjs.hash(password, await bcryptjs.genSalt(10));
+        await Admin.create({
+            email,
+            password:hashedPassword,
+        });
+
+        return res.status(201).json({success:true, msg:"Account created successfully"});
+    }
+    catch(err) {
+        console.log(err.message);
+        return res.status(500).json({success:false, msg:"Some error occured please try again later"});
+    }
+}
+
+const consultantSignUp = async(req, res) => {
+    try {
+        const {name,email, password} = req.body;
+
+        const user = await Consultants.findOne({email});
+        if(user) return res.status(400).json({success:false, msg:"Consultant exists"});
+
+        const hashedPassword = await bcryptjs.hash(password, await bcryptjs.genSalt(10));
+
+        await Consultants.create({
+            name,
+            email,
+            password:hashedPassword
+        });
+                return res.status(201).json({success:true, msg:"Account created successfully"});
+
+    }   
+    catch(err) {
+        console.log(err.message);
+        return res.status(500).json({success:false, msg:"Some error occured please try again later"});
+    }
+}
+
+const adminLogin = async (req, res) => {
+    try {
+        const {email, password} = req.body;
+
+        const user = await Admin.findOne({email});
+        if(!user) return res.status(400).json({success:false, msg:"Invalid email id"});
+        const decode = await bcryptjs.compare(password, user.password);
+        if(!decode) return res.status(400).json({success:false, msg:"Invalid Password"});
+        
+        const token = jsonwebtoken.sign({email}, process.env.JWT_SECRET, {'expiresIn':'1h'});
+        res.cookie('authtoken', token, {
+            httpOnly:true,
+            secure:true,
+            sameSite:'none',
+            path:'/',
+            maxAge:3600000
+        });
+        return res.status(200).json({success:true, msg:"Login successfull"});
+    }
+    catch(err) {
+        console.log(err.message);
+        return res.status(500).json({success:false, msg:"Some error occured please try again later"});
+    }
+    
+}
+
+const consultantLogin = async (req, res) => {
+    try {
+        const {email, password} = req.body;
+
+        const user = await Consultants.findOne({email});
+        if(!user) return res.status(400).json({success:false, msg:"Invalid email id"});
+        const decode = await bcryptjs.compare(password, user.password);
+        if(!decode) return res.status(400).json({success:false, msg:"Invalid Password"});
+        
+        const token = jsonwebtoken.sign({id:user._id,email}, process.env.JWT_SECRET, {'expiresIn':'1h'});
+        res.cookie('authtoken', token, {
+            httpOnly:true,
+            secure:true,
+            sameSite:'none',
+            path:'/',
+            maxAge:3600000
+        });
+        return res.status(200).json({success:true, msg:"Login successfull",id:user._id});
+    }
+    catch(err) {
+        console.log(err.message);
+        return res.status(500).json({success:false, msg:"Some error occured please try again later"});
+    }
+    
+}
+
+
+module.exports = {checkAuth, handleLogin, userSignUp, adminSignUp, adminLogin, consultantSignUp, consultantLogin}

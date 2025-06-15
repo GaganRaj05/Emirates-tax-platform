@@ -7,9 +7,14 @@ const connectToDb = require('./utils/db');
 const authRoutes = require('./routes/auth');
 const initMinio = require('./utils/initMinio');
 const documentRoutes = require('./routes/docs');
-
+const cors = require('cors');
 
 const app = express();
+app.use(cors({
+    origin:'http://localhost:3000',
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+}))
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());

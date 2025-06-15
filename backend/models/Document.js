@@ -31,8 +31,16 @@ const documentsSchema = new mongoose.Schema({
     uploadedDate: {
         type:Date,
         default:Date.now,
+    },
+    reviewed: {
+        type:Boolean,
+        default:false,
+    },
+    assigned:
+    {
+        type:Boolean,
+        default:false
     }
-
 })
 
-module.exports = mongoose.model('document', documentsSchema);
+module.exports = mongoose.model('documents', documentsSchema);
