@@ -10,11 +10,20 @@ const documentRoutes = require('./routes/docs');
 const cors = require('cors');
 
 const app = express();
+const allowedOrigins = ['http://172.236.19.216:3000', 'https://emiratestax.me', 'http://localhost:3000'];
+
 app.use(cors({
-    origin:['*'],
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
-}))
+}));
+
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
