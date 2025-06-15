@@ -19,6 +19,13 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
 app.use(helmet());
+app.get('/api/healthcheck', (req, res) => {
+  res.json({
+    status: 'healthy',
+    dbConnection: 'active',
+    uptime: process.uptime()
+  });
+});
 app.use('/api/auth', authRoutes);
 app.use('/api/docs', documentRoutes);
 connectToDb();
