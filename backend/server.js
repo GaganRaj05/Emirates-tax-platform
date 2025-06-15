@@ -13,13 +13,7 @@ const app = express();
 const allowedOrigins = ['http://172.236.19.216:3000', 'https://emiratestax.me', 'http://localhost:3000'];
 
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin: 'https://emiratestax.me',
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
 }));
