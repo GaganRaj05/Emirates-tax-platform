@@ -11,7 +11,7 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors({
-    origin:['http://localhost:3000','https://emiratestax.me/'],
+    origin:['http://localhost:3000','https://api.emiratestax.me'],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
 }))
