@@ -39,7 +39,7 @@ const TaxUpload = ({ onClose }) => {
     e.preventDefault();
     setIsLoading(true);
     const formData = new FormData();
-    formData.append('user_id',localStorage.getItem('user_id'));
+    formData.append('userId',localStorage.getItem('user_id'));
     formData.append('company_name', companyName);
     formData.append('designation', designation);
     formData.append('file', file);

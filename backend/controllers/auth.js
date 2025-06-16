@@ -70,8 +70,8 @@ const checkAuth = async(req, res) => {
     try {
         const token = req.cookies?.authtoken;
         if(!token) return res.status(401).json({success:false,msg:"Not logged in"});
-
         const verify = jsonwebtoken.verify(token, process.env.JWT_SECRET);
+        console.log(verify)
         if(!verify) return res.status(400).json({success:false, msg:"Do not tamper with JWT"});
 
         const user = await Users.findOne({email:verify.userData.email});
@@ -146,8 +146,10 @@ const adminLogin = async (req, res) => {
         if(!user) return res.status(400).json({success:false, msg:"Invalid email id"});
         const decode = await bcryptjs.compare(password, user.password);
         if(!decode) return res.status(400).json({success:false, msg:"Invalid Password"});
-        
-        const token = jsonwebtoken.sign({email}, process.env.JWT_SECRET, {'expiresIn':'1h'});
+        const userData = {
+            email
+        }
+        const token = jsonwebtoken.sign({userData}, process.env.JWT_SECRET, {'expiresIn':'1h'});
         res.cookie('authtoken', token, {
             httpOnly:true,
             secure:true,
@@ -173,7 +175,8 @@ const consultantLogin = async (req, res) => {
         const decode = await bcryptjs.compare(password, user.password);
         if(!decode) return res.status(400).json({success:false, msg:"Invalid Password"});
         
-        const token = jsonwebtoken.sign({id:user._id,email}, process.env.JWT_SECRET, {'expiresIn':'1h'});
+        const userData = {id:user._id,email}
+        const token = jsonwebtoken.sign({userData}, process.env.JWT_SECRET, {'expiresIn':'1h'});
         res.cookie('authtoken', token, {
             httpOnly:true,
             secure:true,

@@ -34,8 +34,8 @@ export default function Login() {
     else if(response?.success) {
       toast.success('Login successfull');
       setUser(response.userData);
-      
-      navigate.push('/admin',{role:'user',user_id:response.userData.id});
+      localStorage.setItem('user_id', response.userData.id);
+      navigate.push('/')
 
     }
 

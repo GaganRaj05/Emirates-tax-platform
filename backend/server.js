@@ -10,14 +10,12 @@ const documentRoutes = require('./routes/docs');
 const cors = require('cors');
 
 const app = express();
-const allowedOrigins = ['http://172.236.19.216:3000', 'https://emiratestax.me', 'http://localhost:3000'];
 
 app.use(cors({
-    origin: 'https://emiratestax.me',
+    origin: ['http://172.236.19.216:3000', 'https://emiratestax.me', 'http://localhost:3000'],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
 }));
-app.options('*', cors());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());

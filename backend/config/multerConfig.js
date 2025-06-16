@@ -5,7 +5,7 @@ const path = require('path');
 const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb)=> {
-    const allowedTypes =  /pdf|docs|csv|txt|xlsx/;
+    const allowedTypes =  /pdf|docs|csv|txt|xlsx|docx/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype);
 

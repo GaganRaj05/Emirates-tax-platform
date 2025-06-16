@@ -61,7 +61,7 @@ const checkAuth = async() => {
   try { 
     const response = await fetch(`${Backend_url}/auth/check-auth`,{
       method:'GET',
-
+      credentials:'include',
     } 
     )
             const data = await response.json();
