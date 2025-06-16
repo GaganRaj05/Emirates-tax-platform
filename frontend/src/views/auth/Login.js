@@ -20,9 +20,9 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(false);
-    const response = await userLogin(formData, 'user');
     setIsLoading(true);
+    const response = await userLogin(formData, 'user');
+    setIsLoading(false);
     if(response?.error?.msg === "No user exists please create an account") {
       toast.error('Email not found, Please create an account');
       return;
