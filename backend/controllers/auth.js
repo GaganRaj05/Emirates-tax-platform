@@ -48,6 +48,8 @@ const userSignUp = async(req, res) => {
 
         if(userExists) return res.status(400).json({succes:false, msg:"User exists please login"});
 
+        const phoneExists = await Users.findOne({phone});
+        if(phoneExists) return res.status(400).json({success:false, msg:'An account exists with that phone number, Please Login'})
         const hashedPassword = await bcryptjs.hash(password, await bcryptjs.genSalt(10));
 
         await Users.create({

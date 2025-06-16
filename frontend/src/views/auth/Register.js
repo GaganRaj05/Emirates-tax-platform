@@ -27,8 +27,8 @@ export default function Register() {
       toast.success("Account created successfully");
       navigate.push('/auth/login')
     }
-    else if(response?.error?.msg === "User exists please login") {
-      toast.error('An account exists with this email, Please use a different email');
+    else if(response?.error?.msg === "User exists please login" || response?.error?.msg === "An account exists with that phone number, Please Login") {
+      toast.error('An account exists with this email or, Please use a different email');
       return;
     }
     else {
