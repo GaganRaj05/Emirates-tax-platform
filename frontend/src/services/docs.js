@@ -52,9 +52,15 @@ const assignDocument = async(formData) => {
     }
 }
 
-const uploadDocument = async() => {
+const uploadDocument = async(formData) => {
     try {
-        
+        const response = await fetch(`${Backend_url}/docs/upload-docs`, {
+            method:'POST',
+            body:formData
+        });
+        const data = await response.json();
+        if(!response.ok) return {error:data};
+        return data;
     }
     catch(err) {
         console.log(err.message);

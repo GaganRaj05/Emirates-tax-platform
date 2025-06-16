@@ -17,49 +17,64 @@ export default function FooterSmall(props) {
               <div className="text-sm text-blueGray-500 font-semibold py-1 text-center md:text-left">
                 Copyright © {new Date().getFullYear()}{" "}
                 <a
-                  href="https://www.creative-tim.com?ref=nr-footer-small"
+                  href="https://www.emirates-tax-platform.ae"
                   className="text-white hover:text-blueGray-300 text-sm font-semibold py-1"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  Creative Tim
+                  Emirates Tax Platform
                 </a>
               </div>
             </div>
             <div className="w-full md:w-8/12 px-4">
-              <ul className="flex flex-wrap list-none md:justify-end  justify-center">
+              <ul className="flex flex-wrap list-none md:justify-end justify-center">
                 <li>
                   <a
-                    href="https://www.creative-tim.com?ref=nr-footer-small"
+                    href="https://www.emirates-tax-platform.ae/terms"
                     className="text-white hover:text-blueGray-300 text-sm font-semibold block py-1 px-3"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    Creative Tim
+                    Terms
                   </a>
                 </li>
                 <li>
                   <a
-                    href="https://www.creative-tim.com/presentation?ref=nr-footer-small"
+                    href="https://www.emirates-tax-platform.ae/privacy"
                     className="text-white hover:text-blueGray-300 text-sm font-semibold block py-1 px-3"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    About Us
+                    Privacy
                   </a>
                 </li>
                 <li>
                   <a
-                    href="http://blog.creative-tim.com?ref=nr-footer-small"
+                    href="https://www.emirates-tax-platform.ae/contact"
                     className="text-white hover:text-blueGray-300 text-sm font-semibold block py-1 px-3"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    Blog
+                    Contact
                   </a>
                 </li>
                 <li>
                   <a
-                    href="https://github.com/creativetimofficial/notus-react/blob/main/LICENSE.md?ref=nr-footer-small"
+                    href="https://www.tax.gov.ae"
                     className="text-white hover:text-blueGray-300 text-sm font-semibold block py-1 px-3"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    MIT License
+                    FTA Portal
                   </a>
                 </li>
               </ul>
             </div>
+          </div>
+          <div className="text-center mt-2">
+            <p className="text-xs text-blueGray-400">
+              VAT Registration Number: AE123456789
+            </p>
           </div>
         </div>
       </footer>

@@ -11,7 +11,7 @@ export default function FooterAdmin() {
               <div className="text-sm text-blueGray-500 font-semibold py-1 text-center md:text-left">
                 Copyright © {new Date().getFullYear()}{" "}
                 <a
-                  href="https://www.creative-tim.com?ref=nr-footer-admin"
+                  href="https://www.emirates-tax-platform.ae"
                   className="text-blueGray-500 hover:text-blueGray-700 text-sm font-semibold py-1"
                 >
                   Emirates Tax Platform
@@ -19,41 +19,49 @@ export default function FooterAdmin() {
               </div>
             </div>
             <div className="w-full md:w-8/12 px-4">
-              <ul className="flex flex-wrap list-none md:justify-end  justify-center">
+              <ul className="flex flex-wrap list-none md:justify-end justify-center">
                 <li>
                   <a
-                    href="https://www.creative-tim.com?ref=nr-footer-admin"
+                    href="https://www.emirates-tax-platform.ae/terms"
                     className="text-blueGray-600 hover:text-blueGray-800 text-sm font-semibold block py-1 px-3"
                   >
-                    Emirates Tax Platform
+                    Terms & Conditions
                   </a>
                 </li>
                 <li>
                   <a
-                    href="https://www.creative-tim.com/presentation?ref=nr-footer-admin"
+                    href="https://www.emirates-tax-platform.ae/privacy"
                     className="text-blueGray-600 hover:text-blueGray-800 text-sm font-semibold block py-1 px-3"
                   >
-                    About Us
+                    Privacy Policy
                   </a>
                 </li>
                 <li>
                   <a
-                    href="http://blog.creative-tim.com?ref=nr-footer-admin"
+                    href="https://www.emirates-tax-platform.ae/contact"
                     className="text-blueGray-600 hover:text-blueGray-800 text-sm font-semibold block py-1 px-3"
                   >
-                    Blog
+                    Contact Support
                   </a>
                 </li>
                 <li>
                   <a
-                    href="https://github.com/creativetimofficial/notus-react/blob/main/LICENSE.md?ref=nr-footer-admin"
+                    href="https://www.emirates-tax-platform.ae/compliance"
                     className="text-blueGray-600 hover:text-blueGray-800 text-sm font-semibold block py-1 px-3"
                   >
-                    MIT License
+                    Compliance
                   </a>
                 </li>
               </ul>
             </div>
+          </div>
+          <div className="text-center mt-4">
+            <p className="text-sm text-blueGray-500">
+              Emirates Tax Platform is registered with the Federal Tax Authority of the UAE
+            </p>
+            <p className="text-xs text-blueGray-400 mt-1">
+              VAT Registration Number: 123456789012345
+            </p>
           </div>
         </div>
       </footer>

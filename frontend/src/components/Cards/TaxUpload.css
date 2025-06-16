@@ -1,0 +1,104 @@
+/* Overlay background */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+/* Popup box */
+.popup {
+  background: white;
+  padding: 30px 25px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.popup h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.popup label {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 6px;
+  margin-top: 15px;
+  color: #444;
+}
+
+.popup input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+/* Drag & Drop styling */
+.dropzone {
+  margin-top: 10px;
+  padding: 20px;
+  border: 2px dashed #999;
+  border-radius: 8px;
+  text-align: center;
+  color: #666;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.dropzone.active {
+  background: #f0f8ff;
+  border-color: #4a90e2;
+  color: #333;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+.actions button {
+  padding: 10px 18px;
+  font-size: 15px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.actions button[type="submit"] {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.actions .cancel {
+  background-color: #aaa;
+  color: white;
+}

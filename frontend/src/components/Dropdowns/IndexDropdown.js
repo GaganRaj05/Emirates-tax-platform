@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { createPopper } from "@popperjs/core";
-
+import TaxUpload from "components/Cards/TaxUpload";
+import { useAuth } from "context/AuthContext";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { toast } from "react-toastify";
 const IndexDropdown = () => {
   // dropdown props
+  const [isTaxUploadOpen, setIsTaxUploadOpen] = useState(false);
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
+  const {user} = useAuth();
   const popoverDropdownRef = React.createRef();
   const openDropdownPopover = () => {
     createPopper(btnDropdownRef.current, popoverDropdownRef.current, {
@@ -16,6 +21,26 @@ const IndexDropdown = () => {
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
   };
+  const navigate = useHistory();
+
+  const handleClick = () => {
+    if(!user) {
+      navigate.push('/auth/login');
+       toast.success('Login to use this feature')
+    }
+    else {
+      navigate.push('/admin/dashboard',{role:'user',user_id:user.id});
+    }
+  }
+  const handleUploadClick = () => {
+    if(!user) {
+      navigate.push('/auth/login');
+       toast.success('Login to use this feature')
+    }
+    else {
+      setIsTaxUploadOpen(true);
+    }
+  }
   return (
     <>
       <a
@@ -27,7 +52,7 @@ const IndexDropdown = () => {
           dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover();
         }}
       >
-        Demo Pages
+        Check our Features
       </a>
       <div
         ref={popoverDropdownRef}
@@ -41,39 +66,26 @@ const IndexDropdown = () => {
             "text-sm pt-2 pb-0 px-4 font-bold block w-full whitespace-nowrap bg-transparent text-blueGray-400"
           }
         >
-          Admin Layout
+          Features 
         </span>
-        <Link
-          to="/admin/dashboard"
+        <p
           className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
+          style={{cursor:'pointer'}}
+          onClick={()=>handleClick()}
         >
           Dashboard
-        </Link>
-        <Link
-          to="/admin/settings"
-          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-        >
-          Settings
-        </Link>
-        <Link
-          to="/admin/tables"
-          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-        >
-          Tables
-        </Link>
-        <Link
-          to="/admin/maps"
-          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-        >
-          Maps
-        </Link>
+        </p>
+          <p           className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700" style={{cursor:'pointer'}} onClick={()=>handleUploadClick()}>          Upload Tax Docs
+</p>
+    
+        
         <div className="h-0 mx-4 my-2 border border-solid border-blueGray-100" />
         <span
           className={
             "text-sm pt-2 pb-0 px-4 font-bold block w-full whitespace-nowrap bg-transparent text-blueGray-400"
           }
         >
-          Auth Layout
+          Auth 
         </span>
         <Link
           to="/auth/login"
@@ -87,27 +99,9 @@ const IndexDropdown = () => {
         >
           Register
         </Link>
-        <div className="h-0 mx-4 my-2 border border-solid border-blueGray-100" />
-        <span
-          className={
-            "text-sm pt-2 pb-0 px-4 font-bold block w-full whitespace-nowrap bg-transparent text-blueGray-400"
-          }
-        >
-          No Layout
-        </span>
-        <Link
-          to="/landing"
-          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-        >
-          Landing
-        </Link>
-        <Link
-          to="/profile"
-          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-        >
-          Profile
-        </Link>
+        
       </div>
+      {isTaxUploadOpen && <TaxUpload onClose = {()=>setIsTaxUploadOpen(false)}/>}
     </>
   );
 };

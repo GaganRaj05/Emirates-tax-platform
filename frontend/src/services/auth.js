@@ -57,4 +57,21 @@ const userSignUp = async(formData) => {
     }
 }
 
-export {userSignUp, userLogin};
+const checkAuth = async() => {
+  try { 
+    const response = await fetch(`${Backend_url}/auth/check-auth`,{
+      method:'GET',
+
+    } 
+    )
+            const data = await response.json();
+        if(!response.ok) return {error:data};
+        return data;
+
+  }
+  catch(err) {
+    console.log(err.message);
+    return {error:err.message};
+  }
+}
+export {userSignUp, userLogin, checkAuth};

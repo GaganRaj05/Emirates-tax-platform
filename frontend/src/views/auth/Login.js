@@ -4,14 +4,15 @@ import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import { userLogin } from "services/auth";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-
+import { useAuth } from "context/AuthContext";
 export default function Login() {
   const [formData, setFormData] = useState({
     email:'',
     password:'',
   });
+  const {setUser} = useAuth();
   const navigate = useHistory();
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleChange = (e) => {
     e.preventDefault();
     setFormData({...formData, [e.target.name]:e.target.value})
@@ -19,7 +20,9 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(false);
     const response = await userLogin(formData, 'user');
+    setIsLoading(true);
     if(response?.error?.msg === "No user exists please create an account") {
       toast.error('Email not found, Please create an account');
       return;
@@ -30,6 +33,8 @@ export default function Login() {
     }
     else if(response?.success) {
       toast.success('Login successfull');
+      setUser(response.userData);
+      
       navigate.push('/admin',{role:'user',user_id:response.userData.id});
 
     }
@@ -101,25 +106,17 @@ export default function Login() {
                       type="submit"
                       
                     >
-                      Sign In
+                      {isLoading ? <ClipLoader/> : "Sign in"}
                     </button>
                   </div>
                 </form>
               </div>
             </div>
             <div className="flex flex-wrap mt-6 relative">
-              <div className="w-1/2">
-                <a
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                  className="text-blueGray-200"
-                >
-                  <small>Forgot password?</small>
-                </a>
-              </div>
-              <div className="w-1/2 text-right">
+              
+              <div className="w-1/2 text-left">
                 <Link to="/auth/register" className="text-blueGray-200">
-                  <small>Create new account</small>
+                  <small>Don't have an account yet? Create one..</small>
                 </Link>
               </div>
             </div>
