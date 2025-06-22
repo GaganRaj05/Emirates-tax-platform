@@ -1,26 +1,26 @@
 const mongoose = require('mongoose');
 
 
+
+const questionAnswerSchema = new mongoose.Schema({
+    question:{
+        type:String,
+        required:true,
+    },
+    answer: {
+        type:mongoose.Schema.Types.Mixed,
+        required:true,
+    }
+}, {_id:false});
+
 const documentsSchema = new mongoose.Schema({
     userId: {
         type:mongoose.Schema.Types.ObjectId,
         ref:'users',
         required:true,
     },
-    company_name: {
-        type:String,
-        required:true,
-    },
-    designation: {
-        type:String,
-        required:true
-    },
-
+    questions: [questionAnswerSchema],
     originalName:{
-        type:String,
-        required:true,
-    },
-    fileKey: {
         type:String,
         required:true,
     },

@@ -1,7 +1,5 @@
 const Document = require("../models/Document");
-const { minioClient, bucketName } = require("../config/minioConfig");
 const Consultant = require("../models/Consultants");
-const crypto = require("crypto");
 const TaxReports = require("../models/TaxReports");
 const User = require("../models/User");
 const mongoose = require('mongoose')
@@ -11,39 +9,25 @@ const {
   sendMailToConsultants,
 } = require("../utils/sendMail");
 const Consultants = require("../models/Consultants");
+const uploadMedia = require("../utils/uploadMedia");
+
+
 const uploadDocument = async (req, res) => {
   try {
-    const { userId, company_name, designation } = req.body;
+    const { userId, questions } = req.body;
     const file = req.files.file[0];
-    const fileBuffer = file.buffer;
+    const signedUrl = await uploadMedia(file);
     const originalName = file.originalname;
-    const extension = originalName.split(".").pop();
-    const uniqueName = `${Date.now()}-${crypto
-      .randomBytes(6)
-      .toString("hex")}.${extension}`;
-    const fileKey = uniqueName;
-
-    await minioClient.putObject(bucketName, fileKey, fileBuffer, {
-      "Content-Type": file.mimetype,
-    });
-
-    const signedUrl = await minioClient.presignedGetObject(
-      bucketName,
-      fileKey,
-      10000
-    );
     const newDoc = await Document.create({
       userId,
-      company_name,
-      designation,
       originalName,
-      fileKey,
+      questions:JSON.parse(questions),
       fileUrl: signedUrl,
     });
 
     return res
       .status(201)
-      .json({ success: true, msg: "Document uploaded successfully" });
+      .json({ success: true, msg: "Document uploaded successfully", newDoc });
   } catch (err) {
     console.log(err.message);
     return res
@@ -71,12 +55,12 @@ const processDocument = async (req, res) => {
 
 const fetchDocuments = async (req, res) => {
   try {
-    const documents = await Document.find({ reviewed: false, assigned: false });
+    const documents = await Document.find({ reviewed: false, assigned: false, reviewed:false });
     const consultants = await Consultant.find();
     return res
       .status(200)
       .json({
-        success: false,
+        success: true,
         msg: "Documents found successfully",
         documents,
         consultants,
@@ -149,22 +133,10 @@ const fetchConsultantDocs = async (req, res) => {
 const uploadTaxReport = async (req, res) => {
   try {
     const { consultant_id, document_id, user_id } = req.body;
-    const tax_report = req.files.file[0];
-    const file_buffer = tax_report.buffer;
+    const tax_report = req.files.tax_report[0];
     const filename = tax_report.originalname;
-    const extension = filename.split(".").pop();
-    const uniqueName = `${Date.now()}-${crypto
-      .randomBytes(6)
-      .toString("hex")}.${extension}`;
-    const fileKey = uniqueName;
-    await minioClient.putObject(bucketName, fileKey, file_buffer, {
-      "Content-Type": tax_report.mimetype,
-    });
-    const signedUrl = await minioClient.presignedGetObject(
-      bucketName,
-      fileKey,
-      2400
-    );
+    
+    const signedUrl = await uploadMedia(tax_report);
 
     await TaxReports.create({
       filename,
@@ -182,13 +154,13 @@ const uploadTaxReport = async (req, res) => {
         },
       }
     );
-    await Document.deleteOne({ _id: document_id });
+    await Document.findOneAndUpdate({ _id: document_id }, {$set:{reviewed:true}});
 
     return res
       .status(201)
       .json({ success: true, msg: "Tax report generated succesfully" });
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
     return res
       .status(500)
       .json({
@@ -201,7 +173,8 @@ const uploadTaxReport = async (req, res) => {
 const fetchUserDocs = async (req, res) => {
   try {
     const user_id = req.query.user_id;
-    const tax_docs = await TaxReports.find({ user_id });
+    console.log("tax-reports",user_id)
+    const tax_docs = await TaxReports.find({ user_id:new mongoose.Types.ObjectId(user_id) });
 
     return res
       .status(200)
@@ -221,6 +194,20 @@ const fetchUserDocs = async (req, res) => {
   }
 };
 
+const fetchPreviouslyUploadedDocs = async(req, res) => {
+  try {
+    const user_id = req.query.user_id;
+    console.log(user_id)
+    const documents = await Document.find({userId:new mongoose.Types.ObjectId(user_id)});
+
+    return res.status(200).json({success:true,msg:"Documents fetch successfully",documents});
+  }
+  catch(err) {
+    console.log(err.message);
+    return res.status(501).json({success:false,msg:"Some error occured please try again later"});
+  }
+}
+
 module.exports = {
   uploadDocument,
   uploadTaxReport,
@@ -228,4 +215,5 @@ module.exports = {
   fetchConsultantDocs,
   assignDocument,
   fetchUserDocs,
+  fetchPreviouslyUploadedDocs,
 };

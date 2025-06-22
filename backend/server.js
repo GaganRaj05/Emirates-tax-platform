@@ -5,7 +5,6 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const connectToDb = require('./utils/db');
 const authRoutes = require('./routes/auth');
-const initMinio = require('./utils/initMinio');
 const documentRoutes = require('./routes/docs');
 const cors = require('cors');
 
@@ -30,6 +29,5 @@ app.get('/api/healthcheck', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/docs', documentRoutes);
 connectToDb();
-initMinio();
 app.listen(process.env.PORT, "0.0.0.0", ()=>console.log("Server started at PORT: ", process.env.PORT));
 
